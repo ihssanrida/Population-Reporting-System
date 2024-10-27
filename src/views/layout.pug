@@ -1,3 +1,5 @@
+// views/layout.pug
+
 doctype html
 html(lang="en")
   head
@@ -49,31 +51,11 @@ html(lang="en")
             li.nav-item
               a.nav-link(href='/' class=(currentPath === '/' ? 'active' : ''))
                 i.bi.bi-house-door.me-1 Home
-            li.nav-item
     .container-fluid
       .row
         nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse.p-3
           .position-sticky
             ul.nav.flex-column
-              li.nav-item.mb-2
-                h6.sidebar-heading.d-flex.justify-content-between.align-items-center.px-3.mt-4.mb-1.text-muted
-                  span Country Reports
-              li.nav-item
-                a.nav-link(href='/countries' class=(currentPath === '/countries' ? 'active' : ''))
-                  i.bi.bi-globe.me-2 All Countries
-              li.nav-item
-                a.nav-link(href='/countries/continent' class=(currentPath === '/countries/continent' ? 'active' : ''))
-                  i.bi.bi-map.me-2 By Continent
-                .sub-menu
-                each continent in ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania']
-                  li
-                    a.nav-link(href='/countries/continent/' + continent) #{continent}
-              li.nav-item
-                a.nav-link(href='/countries/region' class=(currentPath === '/countries/region' ? 'active' : ''))
-                  i.bi.bi-pin-map.me-2 By Region
-              li.nav-item
-                a.nav-link(href='#' data-bs-toggle='modal' data-bs-target='#topNCountriesModal')
-                  i.bi.bi-graph-up.me-2 Top N Countries
               li.nav-item.mb-2
                 h6.sidebar-heading.d-flex.justify-content-between.align-items-center.px-3.mt-4.mb-1.text-muted
                   span City Reports
@@ -93,7 +75,7 @@ html(lang="en")
                   i.bi.bi-pin-map.me-2
                   | By Region
                 ul.dropdown-menu
-                  each region in [ 'Africa', 'Asia', 'Central America', 'Europe', 'Middle East', 'North America', 'Pacific','South America' ]
+                  each region in ['Africa', 'Asia', 'Central America', 'Europe', 'Middle East', 'North America', 'Pacific', 'South America']
                     li
                       a.dropdown-item(href='/cities/region/' + region) #{region}
               li.nav-item
@@ -107,63 +89,50 @@ html(lang="en")
                   i.bi.bi-graph-up.me-2 Top N Cities
         main.col-md-9.ms-sm-auto.col-lg-10.px-md-4.py-4.main-content
           block content
-    #topNCountriesModal.modal.fade
-      .modal-dialog
-        .modal-content
-          .modal-header
-            h5.modal-title i.bi.bi-graph-up.me-2 Top N Countries Report
-            button.btn-close(data-bs-dismiss='modal')
-          .modal-body
-            form(action='/countries/top' method='GET')
-              .mb-3
-                label.form-label(for='nCountries') Number of Countries
-                input#nCountries.form-control(type='number' name='n' min='1' required)
-              .mb-3
-                label.form-label(for='countryScope') Scope
-                select#countryScope.form-select(name='scope')
-                  option(value='world') World
-                  option(value='continent') Continent
-                  option(value='region') Region
-              #continentSelectCountries.mb-3.d-none
-                label.form-label(for='continent') Continent
-                select.form-select(name='continent')
-                  each continent in ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania']
-                    option(value=continent)= continent
-              button.btn.btn-primary.w-100(type='submit') Generate Report
+          
+    // Modal for top N cities selection
     #topNCitiesModal.modal.fade
       .modal-dialog
         .modal-content
           .modal-header
             h5.modal-title i.bi.bi-graph-up.me-2 Top N Cities Report
-            button.btn-close(data-bs-dismiss='modal')
+            button.btn-close(data-bs-dismiss='modal' aria-label='Close')
           .modal-body
             form(action='/cities/top' method='GET')
               .mb-3
                 label.form-label(for='nCities') Number of Cities
-                input#nCities.form-control(type='number' name='n' min='1' required)
+                input#nCities.form-control(type='number' name='n' min='1' placeholder='Enter number of cities' required)
               .mb-3
                 label.form-label(for='cityScope') Scope
                 select#cityScope.form-select(name='scope')
                   option(value='world') World
                   option(value='continent') Continent
                   option(value='region') Region
-                  option(value='country') Country
-                  option(value='district') District
+              // Continent selection when "continent" is chosen
               #continentSelectCities.mb-3.d-none
                 label.form-label(for='continent') Continent
                 select.form-select(name='continent')
                   each continent in ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania']
                     option(value=continent)= continent
+              // Region selection when "region" is chosen
+              #regionSelectCities.mb-3.d-none
+                label.form-label(for='region') Region
+                select.form-select(name='region')
+                  each region in ['Africa', 'Asia', 'Central America', 'Europe', 'Middle East', 'North America', 'Pacific', 'South America']
+                    option(value=region)= region
               button.btn.btn-primary.w-100(type='submit') Generate Report
+
+    // Scripts for Bootstrap and dynamic scope selection
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js")
     script.
       document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('countryScope').addEventListener('change', function() {
-          const continentSelect = document.getElementById('continentSelectCountries');
-          continentSelect.classList.toggle('d-none', this.value !== 'continent');
-        });
+        function toggleSelectVisibility(scopeValue) {
+          document.getElementById('continentSelectCities').classList.toggle('d-none', scopeValue !== 'continent');
+          document.getElementById('regionSelectCities').classList.toggle('d-none', scopeValue !== 'region');
+        }
+        
+        // Event listener for scope selection in top N cities modal
         document.getElementById('cityScope').addEventListener('change', function() {
-          const continentSelect = document.getElementById('continentSelectCities');
-          continentSelect.classList.toggle('d-none', this.value !== 'continent');
+          toggleSelectVisibility(this.value);
         });
       });
