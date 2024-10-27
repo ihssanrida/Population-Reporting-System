@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  .container
+    h1.mb-4 #{title}
+
+    // Download Report Button
+    .d-flex.justify-content-end.mb-3
+      a.btn.btn-secondary(href=`/cities/top/${n}?scope=${scope}&download=true`) Download Report
+
+    // Table to display top N cities data
+    if cities && cities.length
+      .table-responsive
+        table.table.table-striped
+          thead
+            tr
+              th Rank
+              th Name
+              th Country Code
+              th District
+              th Population
+          tbody
+            each city, index in cities
+              tr
+                td #{index + 1}
+                td #{city.Name}
+                td #{city.CountryCode}
+                td #{city.District}
+                td #{city.Population.toLocaleString()} 
+    else
+      .alert.alert-warning.mt-4 No city data available to display.
