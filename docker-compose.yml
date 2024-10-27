@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: population_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1092
+      MYSQL_DATABASE: world
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - population-network
+
+  web:
+    build: .
+    container_name: population_web
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: 1092
+      DB_NAME: world
+      DB_PORT: 3306
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - population-network
+
+networks:
+  population-network:
+
+volumes:
+  db_data:
