@@ -1,16 +1,26 @@
 doctype html
-html
+html(lang="en")
   head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title= title || 'Population Reporting System'
-    link(rel='stylesheet', href='/css/style.css')
+    link(rel="stylesheet", href="/css/style.css")
+
   body
     header
-      h1 Population Reporting System
-      nav
-        ul
-          li: a(href='/') Home
-          // Add more links if needed for other pages
-    main
+      .container
+        h1 Population Reporting System
+        nav
+          ul.nav-list
+            li.nav-item: a(href='/') Home
+            li.nav-item: a(href='/countries') Country Reports
+            li.nav-item: a(href='/cities') City Reports
+            // Add more links as needed for other pages
+    main.container
       block content
     footer
-      p &copy; 2024 Population Reporting System
+      .container
+        p &copy; 2024 Population Reporting System
+     
+  
+
