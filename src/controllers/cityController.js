@@ -47,6 +47,28 @@ class CityController {
         });
     }
 
+
+    /**
+     * Generates and downloads a CSV report of cities in a specific region.
+     */
+    static downloadCitiesByRegionReport(req, res) {
+      const { region } = req.params;
+      cityModel.getCitiesByRegion(region, (error, cities) => {
+          if (error) {
+              console.error('Error fetching cities for report:', error);
+              return res.status(500).render('error', { message: 'Error generating report' });
+          }
+
+          const fields = ['Name', 'CountryCode', 'District', 'Population'];
+          const json2csvParser = new Parser({ fields });
+          const csv = json2csvParser.parse(cities);
+
+          res.header('Content-Type', 'text/csv');
+          res.attachment(`cities_${region}_report.csv`);
+          return res.send(csv);
+      });
+  }
+
     /**
      * Fetches cities in a specific country by population and renders the "byCountry.pug" view.
      */
