@@ -16,7 +16,7 @@ services:
 
   web:
     build: .
-    container_name: population_web
+    container_name: pop_web
     environment:
       DB_HOST: db
       DB_USER: root
