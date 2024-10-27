@@ -1,18 +1,78 @@
-extends layouts/main
+
+extends ../layout
 
 block content
-  h2= title
+  h1 City Population Report
+  
+  // Filter Section
+  .filters
+    form(action="/cities/filter" method="GET")
+      .filter-group
+        label(for="continent") Continent:
+        select(name="continent" id="continent")
+          option(value="") All Continents
+          option(value="Asia") Asia
+          option(value="Europe") Europe
+          option(value="Africa") Africa
+          option(value="North America") North America
+          option(value="South America") South America
+          option(value="Oceania") Oceania
+          option(value="Antarctica") Antarctica
+
+      .filter-group
+        label(for="region") Region:
+        select(name="region" id="region")
+          option(value="") All Regions
+          option(value="Eastern Asia") Eastern Asia
+          option(value="Western Europe") Western Europe
+          option(value="Northern Africa") Northern Africa
+          //- Add more regions as needed
+
+      .filter-group
+        label(for="country") Country:
+        select(name="country" id="country")
+          option(value="") All Countries
+          option(value="USA") USA
+          option(value="China") China
+          option(value="Brazil") Brazil
+          //- Add more countries as needed
+
+      .filter-group
+        label(for="district") District:
+        input(type="text" name="district" placeholder="Enter District")
+
+      .filter-group
+        label(for="minPopulation") Min Population:
+        input(type="number" name="minPopulation" placeholder="0")
+
+      .filter-group
+        label(for="maxPopulation") Max Population:
+        input(type="number" name="maxPopulation" placeholder="1000000")
+
+      button(type="submit") Apply Filters
+
+  // City Table
   table
     thead
       tr
         th Name
-        th Country Code
+        th Country
         th District
         th Population
     tbody
-      each city in cities
-        tr
-          td= city.Name
-          td= city.CountryCode
-          td= city.District
-          td= city.Population
+      tr
+        td Tokyo
+        td Japan
+        td Tokyo-to
+        td 37,393,129
+      tr
+        td Delhi
+        td India
+        td Delhi
+        td 31,000,000
+      tr
+        td Shanghai
+        td China
+        td Shanghai
+        td 27,000,000
+al testing
