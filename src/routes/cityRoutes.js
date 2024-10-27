@@ -15,5 +15,7 @@ router.get('/cities/top/region/:region/:n', cityController.getTopNPopulatedCitie
 
 //Download continent report
 router.get('/cities/download/:continent', cityController.downloadCitiesReport);
+// byRegion
+router.get('/cities/download/region/:region', cityController.downloadCitiesByRegionReport);
 
 module.exports = router;
