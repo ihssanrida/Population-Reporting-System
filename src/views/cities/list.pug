@@ -1,0 +1,18 @@
+extends layouts/main
+
+block content
+  h2= title
+  table
+    thead
+      tr
+        th Name
+        th Country Code
+        th District
+        th Population
+    tbody
+      each city in cities
+        tr
+          td= city.Name
+          td= city.CountryCode
+          td= city.District
+          td= city.Population
