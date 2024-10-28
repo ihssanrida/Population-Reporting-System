@@ -1,4 +1,3 @@
-// controllers/countryController.js
 const countryModel = require('../models/countryModel');
 
 // Controller for getting all countries by population

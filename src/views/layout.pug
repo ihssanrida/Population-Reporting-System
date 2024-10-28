@@ -6,42 +6,72 @@ html(lang="en")
     title #{title ? title + ' | Population Reports' : 'Population Reports'}
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet")
     link(href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet")
+
+    link(rel="stylesheet" href="/css/style.css")
     style.
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+        color: #495057;
+      }
+      
+      .navbar {
+        font-size: 1.1rem;
+        padding: 1rem 1.5rem;
+      }
+      
       .nav-link.active {
-        font-weight: 500;
+        font-weight: 600;
         color: #0d6efd !important;
       }
-      .dropdown-item:active {
-        background-color: #0d6efd;
-      }
+      
       .sidebar {
         min-height: calc(100vh - 56px);
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        font-size: 1rem;
       }
+      
+      .sidebar-heading {
+        font-weight: 600;
+        color: #6c757d;
+      }
+      
       .main-content {
         min-height: calc(100vh - 56px);
+        padding: 2rem;
       }
-      .navbar-brand i {
-        color: #0d6efd;
-      }
-      .sub-menu {
-        margin-left: 1.5rem;
-      }
-      .table-responsive {
-        overflow-x: auto;
-      }
+
       .report-card {
         transition: transform 0.2s;
       }
+      
       .report-card:hover {
-        transform: translateY(-2px);
+        transform: translateY(-4px);
       }
+      
+      .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+        font-weight: 500;
+      }
+      
+      .btn-primary:hover {
+        background-color: #0a58ca;
+      }
+
+      .modal-header h5 {
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-white.border-bottom
       .container-fluid
         a.navbar-brand.d-flex.align-items-center(href='/')
           i.bi.bi-globe2.fs-4.me-2
-          span.fs-4 Population Reports
+          span Population Reports
         button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav')
           span.navbar-toggler-icon
         #navbarNav.collapse.navbar-collapse
@@ -49,30 +79,28 @@ html(lang="en")
             li.nav-item
               a.nav-link(href='/' class=(currentPath === '/' ? 'active' : ''))
                 i.bi.bi-house-door.me-1 Home
+
     .container-fluid
       .row
         // Sidebar Navigation
-        nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse.p-3
+        nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse
           .position-sticky
             ul.nav.flex-column
-              li.nav-item.mb-2
-                h6.sidebar-heading.d-flex.justify-content-between.align-items-center.px-3.mt-4.mb-1.text-muted
-                  span City Reports
+              li.nav-item.mb-3
+                h6.sidebar-heading.text-muted City Reports
               li.nav-item
                 a.nav-link(href='/cities' class=(currentPath === '/cities' ? 'active' : ''))
                   i.bi.bi-buildings.me-2 All Cities
               li.nav-item.dropdown
                 a.nav-link.dropdown-toggle(data-bs-toggle='dropdown' href='#' role='button' aria-expanded='false')
-                  i.bi.bi-geo.me-2
-                  | By Continent
+                  i.bi.bi-geo.me-2 By Continent
                 ul.dropdown-menu
                   each continent in ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania']
                     li
                       a.dropdown-item(href='/cities/continent/' + continent) #{continent}
               li.nav-item.dropdown
                 a.nav-link.dropdown-toggle(data-bs-toggle='dropdown' href='#' role='button' aria-expanded='false')
-                  i.bi.bi-pin-map.me-2
-                  | By Region
+                  i.bi.bi-pin-map.me-2 By Region
                 ul.dropdown-menu
                   each region in ['Africa', 'Asia', 'Central America', 'Europe', 'Middle East', 'North America', 'Pacific', 'South America']
                     li
@@ -80,8 +108,11 @@ html(lang="en")
               li.nav-item
                 a.nav-link(href='/cities/country' class=(currentPath === '/cities/country' ? 'active' : ''))
                   i.bi.bi-flag.me-2 By Country
+                form(action='/cities/country' method='GET' class='mt-2')
+                  label(for='country') Enter Country:
+                  input#country.form-control(type='text' name='country' placeholder='Enter country name' required)
+                  button.btn.btn-primary.w-100.mt-2(type='submit') View Cities
               li.nav-item
-                // Filter by District
                 a.nav-link(href='#') By District
                 form(action='/cities/district' method='GET' class='mt-2')
                   label(for='district') Enter District:
@@ -90,7 +121,8 @@ html(lang="en")
               li.nav-item
                 a.nav-link(href='#' data-bs-toggle='modal' data-bs-target='#topNCitiesModal')
                   i.bi.bi-graph-up.me-2 Top N Cities
-        main.col-md-9.ms-sm-auto.col-lg-10.px-md-4.py-4.main-content
+
+        main.col-md-9.ms-sm-auto.col-lg-10.main-content
           block content
           
     // Modal for top N cities selection
@@ -111,13 +143,11 @@ html(lang="en")
                   option(value='world') World
                   option(value='continent') Continent
                   option(value='region') Region
-              // Continent selection when "continent" is chosen
               #continentSelectCities.mb-3.d-none
                 label.form-label(for='continent') Continent
                 select.form-select(name='continent')
                   each continent in ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania']
                     option(value=continent)= continent
-              // Region selection when "region" is chosen
               #regionSelectCities.mb-3.d-none
                 label.form-label(for='region') Region
                 select.form-select(name='region')
@@ -134,7 +164,6 @@ html(lang="en")
           document.getElementById('regionSelectCities').classList.toggle('d-none', scopeValue !== 'region');
         }
         
-        // Event listener for scope selection in top N cities modal
         document.getElementById('cityScope').addEventListener('change', function() {
           toggleSelectVisibility(this.value);
         });
