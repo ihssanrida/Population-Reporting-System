@@ -44,6 +44,55 @@ The application uses Docker for simplified deployment. The services are defined 
 - `db`: Runs the MySQL database container.
 - `web`: Runs the Node.js backend application container.
 
+**Update the `docker-compose.yml` file** under the `db` and `web` services:
+
+   ```yaml
+   services:
+     db:
+       image: mysql:8.0
+       container_name: population_db
+       restart: unless-stopped
+       environment:
+         MYSQL_ROOT_PASSWORD: your_new_password
+         MYSQL_DATABASE: your_new_database
+         MYSQL_ROOT_HOST: "%"
+       command: --default-authentication-plugin=mysql_native_password
+       ports:
+         - "3307:3306"
+       volumes:
+         - db_data:/var/lib/mysql
+         - ./src/db/init:/docker-entrypoint-initdb.d
+       networks:
+         - population-network
+
+     web:
+       build: .
+       container_name: pop_web
+       restart: unless-stopped
+       environment:
+         DB_HOST: db
+         DB_USER: your_new_user
+         DB_PASSWORD: your_new_password
+         DB_NAME: your_new_database
+         DB_PORT: 3306
+       ports:
+         - "3000:3000"
+       depends_on:
+         db:
+           condition: service_healthy
+       networks:
+         - population-network
+
+## Update the environment variables in your code (e.g., in a .env file or configuration file used by your application):
+
+makefile
+Copy code
+DB_HOST=db
+DB_USER=your_new_user
+DB_PASSWORD=your_new_password
+DB_NAME=your_new_database
+DB_PORT=3306
+
 ### Running the Application
 
 To start the application, follow these steps:
