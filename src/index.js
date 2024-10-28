@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const db = require('./config/db'); // Importing database connection
+require('dotenv').config();
 
 
 const countryRoutes = require('./routes/countryRoutes');
@@ -34,5 +35,8 @@ app.listen(PORT, () => {
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT
+
+    
   });
 });
+
