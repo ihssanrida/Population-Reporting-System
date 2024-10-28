@@ -73,7 +73,10 @@ class CityController {
      * Fetches cities in a specific country by population and renders the "byCountry.pug" view.
      */
     static getCitiesByCountry(req, res) {
-      const { country } = req.query;
+      const  country  = req.query.country || req.params.country;
+      if(!country) {
+        return res.status(400).render('error', {message: 'Country name is needed to filter cities'})
+      }
       cityModel.getCitiesByCountry(country, (error, cities) => {
           if (error) {
               console.error(`Error fetching cities in country ${country}:`, error);
@@ -87,7 +90,10 @@ class CityController {
      * Fetches cities in a specific district by population and renders the "byDistrict.pug" view.
      */
     static getCitiesByDistrict(req, res) {
-        const { district } = req.params;
+        const  district  = req.query.district || req.params.district;
+        if (!district) {
+          return res.status(400).render('error', {message: "District name is required to filter cities. "})
+        }
         cityModel.getCitiesByDistrict(district, (error, cities) => {
             if (error) {
                 console.error(`Error fetching cities in district ${district}:`, error);

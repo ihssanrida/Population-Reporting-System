@@ -14,18 +14,18 @@ block content
         table.table.table-striped
           thead
             tr
-              th Rank
+              
               th Name
               th Country Code
               th District
               th Population
           tbody
-            each city, index in cities
+            each city in cities
               tr
-                td #{index + 1}
+                
                 td #{city.Name}
                 td #{city.CountryCode}
                 td #{city.District}
-                td #{city.Population.toLocaleString()} 
+                td #{city.Population}
     else
       .alert.alert-warning.mt-4 No city data available to display.
