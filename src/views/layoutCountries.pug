@@ -3,39 +3,10 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title #{title ? title + ' | Population Reports' : 'Population Reports'}
+    title #{title ? title + ' | Countries - Population Reports' : 'Countries - Population Reports'}
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet")
     link(href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet")
-    style.
-      .nav-link.active {
-        font-weight: 500;
-        color: #0d6efd !important;
-      }
-      .dropdown-item:active {
-        background-color: #0d6efd;
-      }
-      .sidebar {
-        min-height: calc(100vh - 56px);
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-      }
-      .main-content {
-        min-height: calc(100vh - 56px);
-      }
-      .navbar-brand i {
-        color: #0d6efd;
-      }
-      .sub-menu {
-        margin-left: 1.5rem;
-      }
-      .table-responsive {
-        overflow-x: auto;
-      }
-      .report-card {
-        transition: transform 0.2s;
-      }
-      .report-card:hover {
-        transform: translateY(-2px);
-      }
+    link(href="/path/to/styles.css" rel="stylesheet") 
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-white.border-bottom
       .container-fluid
@@ -49,8 +20,11 @@ html(lang="en")
             li.nav-item
               a.nav-link(href='/' class=(currentPath === '/' ? 'active' : ''))
                 i.bi.bi-house-door.me-1 Home
+           
+
     .container-fluid
       .row
+        // Sidebar
         nav.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse.p-3
           .position-sticky
             ul.nav.flex-column
@@ -67,7 +41,7 @@ html(lang="en")
                 ul.dropdown-menu
                   each continent in ['Asia', 'Europe', 'North America', 'South America', 'Africa', 'Oceania']
                     li
-                      a.dropdown-item(href='/countries/continent/' + continent) #{continent}
+                      a.dropdown-item(href='/countries/continent/' + continent)= continent
               li.nav-item.dropdown
                 a.nav-link.dropdown-toggle(data-bs-toggle='dropdown' href='#' role='button' aria-expanded='false')
                   i.bi.bi-pin-map.me-2
@@ -75,13 +49,18 @@ html(lang="en")
                 ul.dropdown-menu
                   each region in ['Africa', 'Asia', 'Central America', 'Europe', 'Middle East', 'North America', 'Pacific', 'South America']
                     li
-                      a.dropdown-item(href='/countries/region/' + region) #{region}
+                      a.dropdown-item(href='/countries/region/' + region)= region
               li.nav-item
                 a.nav-link(href='#' data-bs-toggle='modal' data-bs-target='#topNCountriesModal')
                   i.bi.bi-graph-up.me-2 Top N Countries
+
+        // Main content
         main.col-md-9.ms-sm-auto.col-lg-10.px-md-4.py-4.main-content
+          h1.mb-4 #{title ? title : 'Countries Overview'}
+         
+          // Dynamic content block
           block content
-          
+
     // Modal for top N countries selection
     #topNCountriesModal.modal.fade
       .modal-dialog
@@ -122,7 +101,7 @@ html(lang="en")
           document.getElementById('continentSelectCountries').classList.toggle('d-none', scopeValue !== 'continent');
           document.getElementById('regionSelectCountries').classList.toggle('d-none', scopeValue !== 'region');
         }
-        
+
         // Event listener for scope selection in top N countries modal
         document.getElementById('countryScope').addEventListener('change', function() {
           toggleSelectVisibility(this.value);

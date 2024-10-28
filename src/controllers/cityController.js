@@ -1,9 +1,7 @@
 const cityModel = require('../models/cityModel');
 const { Parser } = require('json2csv');
 
-/**
- * CityController class handles requests for city data by various geographic scopes.
- */
+
 class CityController {
 
     /**
@@ -103,58 +101,6 @@ class CityController {
         });
     }
 
-    /**
-     * Fetches the top N populated cities worldwide and renders the "topNCities.pug" view.
-     */
-    // static getTopNPopulatedCities(req, res) {
-    //     const n = parseInt(req.params.n, 10);
-    //     if (isNaN(n) || n <= 0) {
-    //         return res.status(400).render('error', { message: 'Invalid number provided for top cities' });
-    //     }
-    //     cityModel.getTopNPopulatedCities(n, (error, cities) => {
-    //         if (error) {
-    //             console.error(`Error fetching top ${n} populated cities:`, error);
-    //             return res.status(500).render('error', { message: 'Error retrieving top cities' });
-    //         }
-    //         res.render('cities/topNCities', { title: `Top ${n} Cities by Population`, n, scope: 'World', cities });
-    //     });
-    // }
-
-    /**
-     * Fetches the top N populated cities in a specific continent and renders the "topNCities.pug" view.
-     */
-    // static getTopNPopulatedCitiesInContinent(req, res) {
-    //     const { continent, n } = req.params;
-    //     const limit = parseInt(n, 10);
-    //     if (isNaN(limit) || limit <= 0) {
-    //         return res.status(400).render('error', { message: 'Invalid number provided for top cities' });
-    //     }
-    //     cityModel.getTopNPopulatedCitiesInContinent(continent, limit, (error, cities) => {
-    //         if (error) {
-    //             console.error(`Error fetching top ${limit} cities in continent ${continent}:`, error);
-    //             return res.status(500).render('error', { message: 'Error retrieving top cities by continent' });
-    //         }
-    //         res.render('cities/topNCities', { title: `Top ${limit} Cities in ${continent}`, n: limit, scope: continent, cities });
-    //     });
-    // }
-
-    /**
-     * Fetches the top N populated cities in a specific region and renders the "topNCities.pug" view.
-     */
-    // static getTopNPopulatedCitiesInRegion(req, res) {
-    //     const { region, n } = req.params;
-    //     const limit = parseInt(n, 10);
-    //     if (isNaN(limit) || limit <= 0) {
-    //         return res.status(400).render('error', { message: 'Invalid number provided for top cities' });
-    //     }
-    //     cityModel.getTopNPopulatedCitiesInRegion(region, limit, (error, cities) => {
-    //         if (error) {
-    //             console.error(`Error fetching top ${limit} cities in region ${region}:`, error);
-    //             return res.status(500).render('error', { message: 'Error retrieving top cities by region' });
-    //         }
-    //         res.render('cities/topNCities', { title: `Top ${limit} Cities in ${region}`, n: limit, scope: region, cities });
-    //     });
-    // }
 
      /**
      * Generates and downloads a CSV report of cities in a specific continent.
