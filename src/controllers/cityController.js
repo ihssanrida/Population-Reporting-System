@@ -87,7 +87,10 @@ class CityController {
      * Fetches cities in a specific district by population and renders the "byDistrict.pug" view.
      */
     static getCitiesByDistrict(req, res) {
-        const { district } = req.params;
+        const  district  = req.query.district || req.params.district;
+        if (!district) {
+          return res.status(400).render('error', {message: "District name is required to filter cities. "})
+        }
         cityModel.getCitiesByDistrict(district, (error, cities) => {
             if (error) {
                 console.error(`Error fetching cities in district ${district}:`, error);
