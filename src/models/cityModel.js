@@ -66,20 +66,30 @@ const getCitiesByRegion = (region, callback) => {
  * @param {string} countryCode - Country code (ISO format).
  * @param {function} callback - Callback function to handle results or errors.
  */
-const getCitiesByCountry = (countryCode, callback) => {
+const getCitiesByCountry = (countryName, callback) => {
   const query = `
-    SELECT Name, CountryCode, District, Population 
-    FROM city WHERE CountryCode = ? ORDER BY Population DESC`;
-  console.log(`Executing query for cities in country: ${countryCode}`);
-  db.query(query, [countryCode], (error, results) => {
+    SELECT city.Name, city.CountryCode, city.District, city.Population 
+    FROM city
+    JOIN country ON city.CountryCode = country.Code
+    WHERE country.Name = ? 
+    ORDER BY city.Population DESC`;
+
+
+  console.log(`Executing query for cities in country: ${countryName}`);
+  
+  db.query(query, [countryName], (error, results) => {
     if (error) {
       console.error('Error executing query:', error);
       return callback(error);
     }
-    console.log(`Query successful, fetched cities in country: ${countryCode}`);
+
+
+    console.log(`Query successful, fetched cities in country: ${countryName}`);
+    
     callback(null, results);
   });
 };
+
 
 /**
  * Fetches cities by district, ordered by population in descending order.
@@ -97,6 +107,102 @@ const getCitiesByDistrict = (district, callback) => {
       return callback(error);
     }
     console.log(`Query successful, fetched cities in district: ${district}`);
+    callback(null, results);
+  });
+};
+
+// /**
+//  * Fetches top N populated cities globally.
+//  * @param {number} n - Number of cities to fetch.
+//  * @param {function} callback - Callback function to handle results or errors.
+//  */
+// const getTopNPopulatedCities = (n, callback) => {
+//   const query = `
+//     SELECT Name, CountryCode, District, Population 
+//     FROM city ORDER BY Population DESC LIMIT ?`;
+//   console.log(`Executing query for top ${n} populated cities globally`);
+//   db.query(query, [n], (error, results) => {
+//     if (error) {
+//       console.error('Error executing query:', error);
+//       return callback(error);
+//     }
+//     console.log(`Query successful, fetched top ${n} populated cities globally`);
+//     callback(null, results);
+//   });
+// };
+
+// /**
+//  * Fetches top N populated cities in a specific continent.
+//  * @param {string} continent - Continent name.
+//  * @param {number} n - Number of cities to fetch.
+//  * @param {function} callback - Callback function to handle results or errors.
+//  */
+// const getTopNPopulatedCitiesInContinent = (continent, n, callback) => {
+//   const query = `
+//     SELECT city.Name, city.CountryCode, city.District, city.Population
+//     FROM city
+//     JOIN country ON city.CountryCode = country.Code
+//     WHERE country.Continent = ? ORDER BY city.Population DESC LIMIT ?`;
+//   console.log(`Executing query for top ${n} populated cities in continent: ${continent}`);
+//   db.query(query, [continent, n], (error, results) => {
+//     if (error) {
+//       console.error('Error executing query:', error);
+//       return callback(error);
+//     }
+//     console.log(`Query successful, fetched top ${n} populated cities in continent: ${continent}`);
+//     callback(null, results);
+//   });
+// };
+
+// /**
+//  * Fetches top N populated cities in a specific region.
+//  * @param {string} region - Region name.
+//  * @param {number} n - Number of cities to fetch.
+//  * @param {function} callback - Callback function to handle results or errors.
+//  */
+// const getTopNPopulatedCitiesInRegion = (region, n, callback) => {
+//   const query = `
+//     SELECT city.Name, city.CountryCode, city.District, city.Population
+//     FROM city
+//     JOIN country ON city.CountryCode = country.Code
+//     WHERE country.Region = ? ORDER BY city.Population DESC LIMIT ?`;
+//   console.log(`Executing query for top ${n} populated cities in region: ${region}`);
+//   db.query(query, [region, n], (error, results) => {
+//     if (error) {
+//       console.error('Error executing query:', error);
+//       return callback(error);
+//     }
+//     console.log(`Query successful, fetched top ${n} populated cities in region: ${region}`);
+//     callback(null, results);
+//   });
+// };
+
+/**
+ * Helper function to execute a query for fetching top N cities based on a given condition.
+ * @param {string} condition - The SQL WHERE clause condition (e.g., 'WHERE country.Continent = ?').
+ * @param {Array} params - Array of parameters to pass into the query.
+ * @param {number} n - Number of cities to fetch.
+ * @param {function} callback - Callback function to handle results or errors.
+ */
+const fetchTopNCities = (condition, params, n, callback) => {
+  const query = `
+    SELECT city.Name, city.CountryCode, city.District, city.Population
+    FROM city
+    JOIN country ON city.CountryCode = country.Code
+    ${condition}
+    ORDER BY city.Population DESC LIMIT ?`;
+
+  console.log(`Executing query for top ${n} populated cities with condition: ${condition}`);
+  
+  // Add limit parameter to the end of params array
+  params.push(n);
+  
+  db.query(query, params, (error, results) => {
+    if (error) {
+      console.error(`Error executing query with condition ${condition}:`, error);
+      return callback(error);
+    }
+    console.log(`Query successful, fetched top ${n} populated cities with condition: ${condition}`);
     callback(null, results);
   });
 };
@@ -128,20 +234,7 @@ const getTopNPopulatedCities = (n, callback) => {
  * @param {function} callback - Callback function to handle results or errors.
  */
 const getTopNPopulatedCitiesInContinent = (continent, n, callback) => {
-  const query = `
-    SELECT city.Name, city.CountryCode, city.District, city.Population
-    FROM city
-    JOIN country ON city.CountryCode = country.Code
-    WHERE country.Continent = ? ORDER BY city.Population DESC LIMIT ?`;
-  console.log(`Executing query for top ${n} populated cities in continent: ${continent}`);
-  db.query(query, [continent, n], (error, results) => {
-    if (error) {
-      console.error('Error executing query:', error);
-      return callback(error);
-    }
-    console.log(`Query successful, fetched top ${n} populated cities in continent: ${continent}`);
-    callback(null, results);
-  });
+  fetchTopNCities('WHERE country.Continent = ?', [continent], n, callback);
 };
 
 /**
@@ -151,20 +244,7 @@ const getTopNPopulatedCitiesInContinent = (continent, n, callback) => {
  * @param {function} callback - Callback function to handle results or errors.
  */
 const getTopNPopulatedCitiesInRegion = (region, n, callback) => {
-  const query = `
-    SELECT city.Name, city.CountryCode, city.District, city.Population
-    FROM city
-    JOIN country ON city.CountryCode = country.Code
-    WHERE country.Region = ? ORDER BY city.Population DESC LIMIT ?`;
-  console.log(`Executing query for top ${n} populated cities in region: ${region}`);
-  db.query(query, [region, n], (error, results) => {
-    if (error) {
-      console.error('Error executing query:', error);
-      return callback(error);
-    }
-    console.log(`Query successful, fetched top ${n} populated cities in region: ${region}`);
-    callback(null, results);
-  });
+  fetchTopNCities('WHERE country.Region = ?', [region], n, callback);
 };
 
 module.exports = {
