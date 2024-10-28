@@ -80,6 +80,10 @@ html(lang="en")
               li.nav-item
                 a.nav-link(href='/cities/country' class=(currentPath === '/cities/country' ? 'active' : ''))
                   i.bi.bi-flag.me-2 By Country
+                form(action='/cities/country' method='GET' class='mt-2')
+                  label(for='country') Enter Country:
+                  input#country.form-control(type='text' name='country' placeholder='Enter country name' required)
+                  button.btn.btn-primary.w-100.mt-2(type='submit') View Cities
               li.nav-item
                 // Filter by District
                 a.nav-link(href='#') By District

@@ -63,8 +63,8 @@ const getCitiesByRegion = (region, callback) => {
 
 /**
  * Fetches cities by country, ordered by population in descending order.
- * @param {string} countryCode - Country code (ISO format).
- * @param {function} callback - Callback function to handle results or errors.
+ * @param {string} countryName 
+ * @param {function} callback 
  */
 const getCitiesByCountry = (countryName, callback) => {
   const query = `

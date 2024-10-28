@@ -73,7 +73,10 @@ class CityController {
      * Fetches cities in a specific country by population and renders the "byCountry.pug" view.
      */
     static getCitiesByCountry(req, res) {
-      const { country } = req.query;
+      const  country  = req.query.country || req.params.country;
+      if(!country) {
+        return res.status(400).render('error', {message: 'Country name is needed to filter cities'})
+      }
       cityModel.getCitiesByCountry(country, (error, cities) => {
           if (error) {
               console.error(`Error fetching cities in country ${country}:`, error);
