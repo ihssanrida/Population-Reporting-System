@@ -1,0 +1,67 @@
+# Node.js dependencies
+/node_modules
+/npm-debug.log
+/yarn-error.log
+/package-lock.json
+/yarn.lock
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Debugging and error reporting files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Docker-related files
+docker-compose.override.yml
+**/docker-compose.*.yml
+
+
+
+# Temporary files
+/tmp
+/pids
+*.pid
+*.seed
+*.pid.lock
+
+# Pug cache files
+/views/**/*.pug.cache
+
+# Dependency directories
+/node_modules
+/.pnp
+.pnp.js
+
+# dotenv environment settings file
+.env
+
+
+
+
+# Database data
+# /db_data
+# /src/db/init
+
+
