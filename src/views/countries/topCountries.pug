@@ -1,0 +1,26 @@
+extends ../layoutCountries
+
+block content
+  h2 Top #{n} Countries by Population
+  p Showing top #{n} countries in #{scope || 'the selected scope'}.
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th Rank
+          th Code
+          th Name
+          th Continent
+          th Region
+          th Population
+          th Capital
+      tbody
+        each country, index in countries
+          tr
+            td #{index + 1}
+            td #{country.Code}
+            td #{country.Name}
+            td #{country.Continent}
+            td #{country.Region}
+            td #{country.Population}
+            td #{country.Capital}
