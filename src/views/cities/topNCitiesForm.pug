@@ -1,0 +1,59 @@
+
+
+//- block scripts
+//-   script.
+//-     document.addEventListener('DOMContentLoaded', function() {
+//-       const scopeSelect = document.getElementById('scope');
+//-       const continentSelect = document.querySelector('.continent-select');
+//-       const regionSelect = document.querySelector('.region-select');
+//-       const downloadButton = document.querySelector('.download-button');
+      
+//-       // Show/hide continent or region select based on scope
+//-       scopeSelect.addEventListener('change', function() {
+//-         if (this.value === 'Continent') {
+//-           continentSelect.classList.remove('d-none');
+//-           regionSelect.classList.add('d-none');
+//-         } else if (this.value === 'Region') {
+//-           continentSelect.classList.add('d-none');
+//-           regionSelect.classList.remove('d-none');
+//-         } else {
+//-           continentSelect.classList.add('d-none');
+//-           regionSelect.classList.add('d-none');
+//-         }
+//-       });
+      
+//-       // Handle download button click
+//-       downloadButton.addEventListener('click', function() {
+//-         const n = document.getElementById('n').value;
+//-         const scopeElement = document.getElementById('scope');
+//-         let scope = scopeElement.value.toLowerCase(); // Ensure lowercase for backend compatibility
+
+//-         if (!n || !scope) {
+//-           alert('Please fill all required fields');
+//-           return;
+//-         }
+
+//-         let downloadUrl = `/cities/download/top/${n}?scope=${scope}`;
+
+//-         if (scope === 'continent') {
+//-           const continent = document.getElementById('continent').value;
+//-           if (!continent) {
+//-             alert('Please select a continent');
+//-             return;
+//-           }
+//-           scope = 'continent'; // Explicitly set scope to 'continent'
+//-           downloadUrl = `/cities/download/top/${n}?scope=${scope}&continent=${continent}`;
+//-         } else if (scope === 'region') {
+//-           const region = document.getElementById('region').value;
+//-           if (!region) {
+//-             alert('Please select a region');
+//-             return;
+//-           }
+//-           scope = 'region'; // Explicitly set scope to 'region'
+//-           downloadUrl = `/cities/download/top/${n}?scope=${scope}&region=${region}`;
+//-         }
+
+//-         console.log('Download URL:', downloadUrl); // Debugging log
+//-         window.location.href = downloadUrl;
+//-       });
+//-     });
